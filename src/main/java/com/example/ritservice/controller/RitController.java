@@ -54,9 +54,15 @@ public class RitController {
         return ritRepository.findRitByRitId(ritId);
     }
 
-    @GetMapping("/ritten/{cargoId}")
+    @GetMapping("/ritten/cargo/{cargoId}")
     public Rit getRitByCargoId(@PathVariable String cargoId){
         return ritRepository.findRitByCargoId(cargoId);
+    }
+
+    @PostMapping("/ritten")
+    public Rit addRit(@RequestBody Rit rit){
+        ritRepository.save(rit);
+        return rit;
     }
 
     @PutMapping("/ritten")
