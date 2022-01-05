@@ -32,8 +32,8 @@ class RitServiceControllerUnitTests {
     @MockBean
     private RitRepository ritRepository;
 
-    private Rit rit1 = new Rit(5, "Startstraat 1", "Eindstraat 1", 700, "1", "1");
-    private Rit rit2 = new Rit(10, "Startstraat 2", "Eindstraat 2", 1000, "2", "2");
+    private Rit rit1 = new Rit(5, "Startstraat 1", "Eindstraat 1", 700, "1", "1", "1-UAE-451");
+    private Rit rit2 = new Rit(10, "Startstraat 2", "Eindstraat 2", 1000, "2", "2", "1-UAE-451");
 
     private List<Rit> allRitten = Arrays.asList(rit1, rit2);
 
@@ -211,7 +211,7 @@ class RitServiceControllerUnitTests {
     //Add
     @Test
     public void whenPostRit_thenReturnJsonRit() throws Exception{
-        Rit rit = new Rit(7, "Kerkstraat 3", "Kerkstraat 12", 200, "4", "1");
+        Rit rit = new Rit(7, "Kerkstraat 3", "Kerkstraat 12", 200, "4", "1", "1-UAE-451");
 
         mockMvc.perform(post("/ritten")
                 .content(mapper.writeValueAsString(rit))
@@ -229,11 +229,11 @@ class RitServiceControllerUnitTests {
     //Update
     @Test
     public void givenRit_whenPutRit_thenReturnJsonRit() throws Exception {
-        Rit toUpdateRit = new Rit(10, "Startstraat 11", "Eindstraat 12", 800, "3", "1");
+        Rit toUpdateRit = new Rit(10, "Startstraat 11", "Eindstraat 12", 800, "3", "1", "1-UAE-451");
 
         given(ritRepository.findRitByRitId("3")).willReturn(toUpdateRit);
 
-        Rit newRit = new Rit(15, "Teststraat 5", "Eindstraat 12", 1000, "3", "1");
+        Rit newRit = new Rit(15, "Teststraat 5", "Eindstraat 12", 1000, "3", "1", "1-UAE-451");
 
         mockMvc.perform(put("/ritten")
                 .content(mapper.writeValueAsString(newRit))

@@ -18,8 +18,8 @@ public class RitController {
     @PostConstruct
     public void fillDB(){
         if (ritRepository.count()==0){
-            ritRepository.save(new Rit(10,"Kerkstraat 1","Teststraat 1",500,"1","1"));
-            ritRepository.save(new Rit(10,"Kerkstraat 2","Teststraat 2",1000,"2","2"));
+            ritRepository.save(new Rit(10,"Kerkstraat 1","Teststraat 1",500,"1","1", "1-UAE-451"));
+            ritRepository.save(new Rit(10,"Kerkstraat 2","Teststraat 2",1000,"2","2", "1-UAE-451"));
         }
 
     }
