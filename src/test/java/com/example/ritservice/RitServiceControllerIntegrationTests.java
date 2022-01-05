@@ -32,8 +32,8 @@ public class RitServiceControllerIntegrationTests {
     @Autowired
     private RitRepository ritRepository;
 
-    private Rit ritRit1 = new Rit(5, "Startstraat 1", "Eindstraat 1", 700, "1", "1");
-    private Rit ritRit2 = new Rit(10, "Startstraat 2", "Eindstraat 2", 1000, "2", "2");
+    private Rit ritRit1 = new Rit(5, "Startstraat 1", "Eindstraat 1", 700, "1", "1", "1-UAE-451");
+    private Rit ritRit2 = new Rit(10, "Startstraat 2", "Eindstraat 2", 1000, "2", "2", "1-UAE-451");
 
     @BeforeEach
     public void beforeAllTests() {
