@@ -15,10 +15,11 @@ jobs:
         with:
           java-version: 15
 
-      - name: Start MongoDB for integration test
-        uses: supercharge/mongodb-github-action@1.3.0
+      - name: Start Mysql for integration test
+        uses: mirromutth/mysql-action@v1.1
         with:
-          mongodb-version: 4.2
+          mysql database: 'rit_mysql' # Optional, default value is "test". The specified database which will be created.
+          mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }} # Required if "mysql user" is empty, default is empty. The root superuser password
 
       - name: Build and analyze
         env:
