@@ -24,12 +24,6 @@ public class Rit {
     }
 
     public Rit(int ritlengte, String vertrekpunt, String bestemming, int begingewicht, String ritId, String cargoId, String nummerplaat) {
-//        this.ritlengte = ritlengte;
-//        this.vertrekpunt = vertrekpunt;
-//        this.bestemming = bestemming;
-//        this.begingewicht = begingewicht;
-//        this.ritId = ritId;
-//        this.cargoId = cargoId;
         setRitlengte(ritlengte);
         setVertrekpunt(vertrekpunt);
         setBestemming(bestemming);

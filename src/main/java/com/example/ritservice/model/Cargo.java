@@ -18,9 +18,6 @@ public class Cargo {
     }
 
     public Cargo(String naam, int hoeveelheid, String cargoId) {
-//        this.naam = naam;
-//        this.hoeveelheid = hoeveelheid;
-//        CargoId = cargoId;
         setNaam(naam);
         setHoeveelheid(hoeveelheid);
         setCargoId(cargoId);

@@ -81,12 +81,14 @@ public class RitController {
     }
 
     @PutMapping("/ritten")
-    public Rit updateRit(@RequestBody Rit rit){
-        Rit retrievedRit = ritRepository.findRitByRitId(rit.getRitId());
-        retrievedRit.setRitlengte(rit.getRitlengte());
-        retrievedRit.setVertrekpunt(rit.getVertrekpunt());
-        retrievedRit.setBestemming(rit.getBestemming());
-        retrievedRit.setBegingewicht(rit.getBegingewicht());
+    public Rit updateRit(@RequestBody Rit updatedRit){
+        Rit retrievedRit = ritRepository.findRitByRitId(updatedRit.getRitId());
+        retrievedRit.setRitlengte(updatedRit.getRitlengte());
+        retrievedRit.setVertrekpunt(updatedRit.getVertrekpunt());
+        retrievedRit.setBestemming(updatedRit.getBestemming());
+        retrievedRit.setBegingewicht(updatedRit.getBegingewicht());
+        retrievedRit.setCargoId(updatedRit.getCargoId());
+        retrievedRit.setNummerplaat(updatedRit.getNummerplaat());
 
         ritRepository.save(retrievedRit);
         return retrievedRit;
