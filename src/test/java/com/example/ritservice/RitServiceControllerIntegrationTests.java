@@ -65,25 +65,29 @@ public class RitServiceControllerIntegrationTests {
                 .andExpect(jsonPath("$[0].begingewicht", is(700)))
                 .andExpect(jsonPath("$[0].ritId", is("1")))
                 .andExpect(jsonPath("$[0].cargoId", is("1")))
+                .andExpect(jsonPath("$[0].nummerplaat", is("1-UAE-451")))
                 .andExpect(jsonPath("$[1].ritlengte", is(10)))
                 .andExpect(jsonPath("$[1].vertrekpunt", is("Startstraat 2")))
                 .andExpect(jsonPath("$[1].bestemming", is("Eindstraat 2")))
                 .andExpect(jsonPath("$[1].begingewicht", is(1000)))
                 .andExpect(jsonPath("$[1].ritId", is("2")))
-                .andExpect(jsonPath("$[1].cargoId", is("2")));
+                .andExpect(jsonPath("$[1].cargoId", is("2")))
+                .andExpect(jsonPath("$[1].nummerplaat", is("1-UAE-451")));
     }
 
     @Test
     public void givenRit_whenGetRittenByRitlengte_thenReturnJsonRitten() throws Exception {
-        mockMvc.perform(get("/ritten/ritlengte/{ritlengte}}", 10))
+        mockMvc.perform(get("/ritten/ritlengte/{ritlengte}", 10))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.ritlengte", is(10)))
-                .andExpect(jsonPath("$.vertrekpunt", is("Startstraat 2")))
-                .andExpect(jsonPath("$.bestemming", is("Eindstraat 2")))
-                .andExpect(jsonPath("$.begingewicht", is(1000)))
-                .andExpect(jsonPath("$.ritId", is("2")))
-                .andExpect(jsonPath("$.cargoId", is("2")));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].ritlengte", is(10)))
+                .andExpect(jsonPath("$[0].vertrekpunt", is("Startstraat 2")))
+                .andExpect(jsonPath("$[0].bestemming", is("Eindstraat 2")))
+                .andExpect(jsonPath("$[0].begingewicht", is(1000)))
+                .andExpect(jsonPath("$[0].ritId", is("2")))
+                .andExpect(jsonPath("$[0].cargoId", is("2")))
+                .andExpect(jsonPath("$[0].nummerplaat", is("1-UAE-451")));
     }
 
     @Test
@@ -101,7 +105,8 @@ public class RitServiceControllerIntegrationTests {
                 .andExpect(jsonPath("$[0].ritlengte", is(5)))
                 .andExpect(jsonPath("$[0].begingewicht", is(700)))
                 .andExpect(jsonPath("$[0].ritId", is("1")))
-                .andExpect(jsonPath("$[0].cargoId", is("1")));
+                .andExpect(jsonPath("$[0].cargoId", is("1")))
+                .andExpect(jsonPath("$[0].nummerplaat", is("1-UAE-451")));;
     }
 
     @Test
@@ -119,7 +124,8 @@ public class RitServiceControllerIntegrationTests {
                 .andExpect(jsonPath("$[0].begingewicht", is(700)))
                 .andExpect(jsonPath("$[0].ritlengte", is(5)))
                 .andExpect(jsonPath("$[0].ritId", is("1")))
-                .andExpect(jsonPath("$[0].cargoId", is("1")));
+                .andExpect(jsonPath("$[0].cargoId", is("1")))
+                .andExpect(jsonPath("$[0].nummerplaat", is("1-UAE-451")));
     }
 
     @Test
@@ -137,7 +143,8 @@ public class RitServiceControllerIntegrationTests {
                 .andExpect(jsonPath("$[0].bestemming", is("Eindstraat 1")))
                 .andExpect(jsonPath("$[0].ritlengte", is(5)))
                 .andExpect(jsonPath("$[0].ritId", is("1")))
-                .andExpect(jsonPath("$[0].cargoId", is("1")));
+                .andExpect(jsonPath("$[0].cargoId", is("1")))
+                .andExpect(jsonPath("$[0].nummerplaat", is("1-UAE-451")));
     }
 
     @Test
@@ -154,7 +161,8 @@ public class RitServiceControllerIntegrationTests {
                 .andExpect(jsonPath("$.begingewicht", is(700)))
                 .andExpect(jsonPath("$.vertrekpunt", is("Startstraat 1")))
                 .andExpect(jsonPath("$.bestemming", is("Eindstraat 1")))
-                .andExpect(jsonPath("$.ritlengte", is(5)));
+                .andExpect(jsonPath("$.ritlengte", is(5)))
+                .andExpect(jsonPath("$.nummerplaat", is("1-UAE-451")));
     }
 
     @Test
@@ -170,26 +178,26 @@ public class RitServiceControllerIntegrationTests {
                 .andExpect(jsonPath("$.bestemming", is("Eindstraat 3")))
                 .andExpect(jsonPath("$.begingewicht", is(850)))
                 .andExpect(jsonPath("$.ritId", is("3")))
-                .andExpect(jsonPath("$.cargoId", is("3")));
+                .andExpect(jsonPath("$.cargoId", is("3")))
+                .andExpect(jsonPath("$.nummerplaat", is("1-UAE-451")));
     }
 
     @Test
     public void givenRit_whenPutRit_thenReturnJsonRit() throws Exception {
-        Rit toUpdateRit = new Rit(20, "Beginstraat 4", "Eindstraat 4", 750, "4", "4", "1-UAE-451");
+        Rit updatedRit = new Rit(20, "Beginstraat 4", "Eindstraat 4", 750, "2", "2", "1-UAE-451");
 
-        Rit newRit = new Rit(26, "Teststraat 25", "Eindstraat 5", 650, "5", "5", "1-UAE-451");
-
-        mockMvc.perform(put("/ritten", toUpdateRit)
-                .content(mapper.writeValueAsString(newRit))
+        mockMvc.perform(put("/ritten")
+                .content(mapper.writeValueAsString(updatedRit))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.ritlengte", is(26)))
-                .andExpect(jsonPath("$.vertrekpunt", is("Teststraat 25")))
-                .andExpect(jsonPath("$.bestemming", is("Eindstraat 5")))
-                .andExpect(jsonPath("$.begingewicht", is(650)))
-                .andExpect(jsonPath("$.ritId", is("5")))
-                .andExpect(jsonPath("$.cargoId", is("5")));
+                .andExpect(jsonPath("$.ritlengte", is(20)))
+                .andExpect(jsonPath("$.vertrekpunt", is("Beginstraat 4")))
+                .andExpect(jsonPath("$.bestemming", is("Eindstraat 4")))
+                .andExpect(jsonPath("$.begingewicht", is(750)))
+                .andExpect(jsonPath("$.ritId", is("2")))
+                .andExpect(jsonPath("$.cargoId", is("2")))
+                .andExpect(jsonPath("$.nummerplaat", is("1-UAE-451")));
     }
 
     @Test
