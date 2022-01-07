@@ -13,12 +13,12 @@ public class Rit {
     private String vertrekpunt;
     private String bestemming;
     private int begingewicht;
-    private String nummerplaat;
 
     @Column(unique = true)
     private String ritId;
 
     public String cargoId;
+    private String nummerplaat;
 
     public Rit() {
     }
@@ -37,14 +37,6 @@ public class Rit {
         setRitId(ritId);
         setCargoId(cargoId);
         setNummerplaat(nummerplaat);
-    }
-
-    public String getNummerplaat() {
-        return nummerplaat;
-    }
-
-    public void setNummerplaat(String nummerplaat) {
-        this.nummerplaat = nummerplaat;
     }
 
     public int getId() {
@@ -101,5 +93,13 @@ public class Rit {
 
     public void setCargoId(String cargoId) {
         this.cargoId = cargoId;
+    }
+
+    public String getNummerplaat() {
+        return nummerplaat;
+    }
+
+    public void setNummerplaat(String nummerplaat) {
+        this.nummerplaat = nummerplaat;
     }
 }

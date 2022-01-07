@@ -59,6 +59,21 @@ public class RitController {
         return ritRepository.findRitByCargoId(cargoId);
     }
 
+    @GetMapping("/ritten/nummerplaat/{nummerplaat}")
+    public List<Rit> getRittenByNummerplaat(@PathVariable String nummerplaat){
+        return ritRepository.findRittenByNummerplaat(nummerplaat);
+    }
+
+    @GetMapping("/ritten/nummerplaat/{nummerplaat}/vertrekpunt/{vertrekpunt}")
+    public List<Rit> getRittenByNummerplaatAndVertrekpunt(@PathVariable String nummerplaat, @PathVariable String vertrekpunt){
+        return ritRepository.findRittenByNummerplaatAndVertrekpunt(nummerplaat,vertrekpunt);
+    }
+
+    @GetMapping("/ritten/nummerplaat/{nummerplaat}/bestemming/{bestemming}")
+    public List<Rit> getRittenByNummerplaatAndBestemming(@PathVariable String nummerplaat, @PathVariable String bestemming){
+        return ritRepository.findRittenByNummerplaatAndBestemming(nummerplaat,bestemming);
+    }
+
     @PostMapping("/ritten")
     public Rit addRit(@RequestBody Rit rit){
         ritRepository.save(rit);
