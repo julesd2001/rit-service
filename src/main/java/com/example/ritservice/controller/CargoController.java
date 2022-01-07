@@ -21,8 +21,6 @@ public class CargoController {
             cargoRepository.save(new Cargo("Cargo 1", 5, "1"));
             cargoRepository.save(new Cargo("Cargo 2", 10, "2"));
         }
-
-        System.out.println(cargoRepository.findCargoByCargoId("2").getNaam());
     }
 
     @GetMapping("/cargos")
