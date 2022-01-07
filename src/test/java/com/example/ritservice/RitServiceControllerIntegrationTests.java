@@ -174,6 +174,25 @@ public class RitServiceControllerIntegrationTests {
     }
 
     @Test
+    public void givenRit_whenPutRit_thenReturnJsonRit() throws Exception {
+        Rit toUpdateRit = new Rit(20, "Beginstraat 4", "Eindstraat 4", 750, "4", "4", "1-UAE-451");
+
+        Rit newRit = new Rit(26, "Teststraat 25", "Eindstraat 5", 650, "5", "5", "1-UAE-451");
+
+        mockMvc.perform(put("/ritten", toUpdateRit)
+                .content(mapper.writeValueAsString(newRit))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ritlengte", is(26)))
+                .andExpect(jsonPath("$.vertrekpunt", is("Teststraat 25")))
+                .andExpect(jsonPath("$.bestemming", is("Eindstraat 5")))
+                .andExpect(jsonPath("$.begingewicht", is(650)))
+                .andExpect(jsonPath("$.ritId", is("5")))
+                .andExpect(jsonPath("$.cargoId", is("5")));
+    }
+
+    @Test
     public void givenRit_whenDeleteRit_thenStatusOk() throws Exception {
         mockMvc.perform(delete("/ritten/{ritId}", "2")
                 .contentType(MediaType.APPLICATION_JSON))
