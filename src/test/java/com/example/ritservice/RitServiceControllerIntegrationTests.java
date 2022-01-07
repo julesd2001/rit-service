@@ -32,14 +32,14 @@ public class RitServiceControllerIntegrationTests {
     @Autowired
     private RitRepository ritRepository;
 
-    private Rit ritRit1 = new Rit(5, "Startstraat 1", "Eindstraat 1", 700, "1", "1", "1-UAE-451");
-    private Rit ritRit2 = new Rit(10, "Startstraat 2", "Eindstraat 2", 1000, "2", "2", "1-UAE-451");
+    private Rit rit1 = new Rit(5, "Startstraat 1", "Eindstraat 1", 700, "1", "1", "1-UAE-451");
+    private Rit rit2 = new Rit(10, "Startstraat 2", "Eindstraat 2", 1000, "2", "2", "1-UAE-451");
 
     @BeforeEach
     public void beforeAllTests() {
         ritRepository.deleteAll();
-        ritRepository.save(ritRit1);
-        ritRepository.save(ritRit2);
+        ritRepository.save(rit1);
+        ritRepository.save(rit2);
     }
 
     @AfterEach
@@ -52,8 +52,8 @@ public class RitServiceControllerIntegrationTests {
     @Test
     public void givenRit_whenGetAllRitten_thenReturnJsonRitten() throws Exception {
         List<Rit> ritList = new ArrayList<>();
-        ritList.add(ritRit1);
-        ritList.add(ritRit2);
+        ritList.add(rit1);
+        ritList.add(rit2);
 
         mockMvc.perform(get("/ritten"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -73,4 +73,117 @@ public class RitServiceControllerIntegrationTests {
                 .andExpect(jsonPath("$[1].cargoId", is("2")));
     }
 
+    @Test
+    public void givenRit_whenGetRittenByRitlengte_thenReturnJsonRitten() throws Exception {
+        mockMvc.perform(get("/ritten/ritlengte/{ritlengte}}", 10))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ritlengte", is(10)))
+                .andExpect(jsonPath("$.vertrekpunt", is("Startstraat 2")))
+                .andExpect(jsonPath("$.bestemming", is("Eindstraat 2")))
+                .andExpect(jsonPath("$.begingewicht", is(1000)))
+                .andExpect(jsonPath("$.ritId", is("2")))
+                .andExpect(jsonPath("$.cargoId", is("2")));
+    }
+
+    @Test
+    public void givenRit_whenGetRittenByVertrekpunt_thenReturnJsonRitten() throws Exception {
+        List<Rit> ritList = new ArrayList<>();
+        ritList.add(rit1);
+        ritList.add(rit2);
+
+        mockMvc.perform(get("/ritten/vertrekpunt/{vertrekpunt}", "Startstraat 1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].vertrekpunt", is("Startstraat 1")))
+                .andExpect(jsonPath("$[0].bestemming", is("Eindstraat 1")))
+                .andExpect(jsonPath("$[0].ritlengte", is(5)))
+                .andExpect(jsonPath("$[0].begingewicht", is(700)))
+                .andExpect(jsonPath("$[0].ritId", is("1")))
+                .andExpect(jsonPath("$[0].cargoId", is("1")));
+    }
+
+    @Test
+    public void givenRit_whenGetRittenByBestemming_thenReturnJsonRitten() throws Exception {
+        List<Rit> ritList = new ArrayList<>();
+        ritList.add(rit1);
+        ritList.add(rit2);
+
+        mockMvc.perform(get("/ritten/bestemming/{bestemming}", "Eindstraat 1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].bestemming", is("Eindstraat 1")))
+                .andExpect(jsonPath("$[0].vertrekpunt", is("Startstraat 1")))
+                .andExpect(jsonPath("$[0].begingewicht", is(700)))
+                .andExpect(jsonPath("$[0].ritlengte", is(5)))
+                .andExpect(jsonPath("$[0].ritId", is("1")))
+                .andExpect(jsonPath("$[0].cargoId", is("1")));
+    }
+
+    @Test
+    public void givenRit_whenGetRittenByBegingewicht_thenReturnJsonRitten() throws Exception {
+        List<Rit> ritList = new ArrayList<>();
+        ritList.add(rit1);
+        ritList.add(rit2);
+
+        mockMvc.perform(get("/ritten/begingewicht/{begingewicht}", 700))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].begingewicht", is(700)))
+                .andExpect(jsonPath("$[0].vertrekpunt", is("Startstraat 1")))
+                .andExpect(jsonPath("$[0].bestemming", is("Eindstraat 1")))
+                .andExpect(jsonPath("$[0].ritlengte", is(5)))
+                .andExpect(jsonPath("$[0].ritId", is("1")))
+                .andExpect(jsonPath("$[0].cargoId", is("1")));
+    }
+
+    @Test
+    public void givenRit_whenGetRitByRitId_thenReturnJsonRit() throws Exception {
+        List<Rit> ritList = new ArrayList<>();
+        ritList.add(rit1);
+        ritList.add(rit2);
+
+        mockMvc.perform(get("/ritten/{ritId}", "1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ritId", is("1")))
+                .andExpect(jsonPath("$.cargoId", is("1")))
+                .andExpect(jsonPath("$.begingewicht", is(700)))
+                .andExpect(jsonPath("$.vertrekpunt", is("Startstraat 1")))
+                .andExpect(jsonPath("$.bestemming", is("Eindstraat 1")))
+                .andExpect(jsonPath("$.ritlengte", is(5)));
+    }
+
+    @Test
+    public void whenPostRit_thenReturnJsonRit() throws Exception {
+        Rit newRit = new Rit(15, "Startstraat 3", "Eindstraat 3", 850, "3", "3", "1-UAE-451");
+
+        mockMvc.perform(post("/ritten")
+                .content(mapper.writeValueAsString(newRit))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.ritlengte", is(15)))
+                .andExpect(jsonPath("$.vertrekpunt", is("Startstraat 3")))
+                .andExpect(jsonPath("$.bestemming", is("Eindstraat 3")))
+                .andExpect(jsonPath("$.begingewicht", is(850)))
+                .andExpect(jsonPath("$.ritId", is("3")))
+                .andExpect(jsonPath("$.cargoId", is("3")));
+    }
+
+    @Test
+    public void givenRit_whenDeleteRit_thenStatusOk() throws Exception {
+        mockMvc.perform(delete("/ritten/{ritId}", "2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenRit_whenDeleteRit_thenStatusNotFound() throws Exception {
+        mockMvc.perform(delete("/ritten/{ritId}", "8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 }

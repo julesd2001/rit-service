@@ -247,4 +247,24 @@ class RitServiceControllerUnitTests {
                 .andExpect(jsonPath("$.ritId",is("3")))
                 .andExpect(jsonPath("$.cargoId",is("1")));
     }
+
+    @Test
+    public void givenRit_whenDeleteRit_thenStatusOk() throws Exception {
+        Rit deleteRit = new Rit(15, "Startstraat 3", "Eindstraat 3", 850, "3", "3", "");
+
+        given(ritRepository.findRitByRitId("3")).willReturn(deleteRit);
+
+        mockMvc.perform(delete("/ritten/{ritId}", "3")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenRit_whenDeleteRit_thenStatusNotFound() throws Exception {
+        given(ritRepository.findRitByRitId("90")).willReturn(null);
+
+        mockMvc.perform(delete("/ritten/{ritId}", "90")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 }
