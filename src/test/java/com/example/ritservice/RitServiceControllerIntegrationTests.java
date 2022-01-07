@@ -1,5 +1,6 @@
 package com.example.ritservice;
 
+import com.example.ritservice.model.Cargo;
 import com.example.ritservice.model.Rit;
 import com.example.ritservice.repository.RitRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +35,8 @@ public class RitServiceControllerIntegrationTests {
 
     private Rit rit1 = new Rit(5, "Startstraat 1", "Eindstraat 1", 700, "1", "1", "1-UAE-451");
     private Rit rit2 = new Rit(10, "Startstraat 2", "Eindstraat 2", 1000, "2", "2", "1-UAE-451");
+
+
 
     @BeforeEach
     public void beforeAllTests() {
@@ -213,4 +216,106 @@ public class RitServiceControllerIntegrationTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+    private Cargo cargo1 = new Cargo("Cargo 1", 5, "1");
+    private Cargo cargo2 = new Cargo("Cargo 2", 10, "2");
+    @Test
+    public void givenCargo_whenGetAllCargos_thenReturnJsonCargos() throws Exception {
+        List<Cargo> cargoList = new ArrayList<>();
+        cargoList.add(cargo1);
+        cargoList.add(cargo2);
+
+        mockMvc.perform(get("/cargos"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].naam", is("Cargo 1")))
+                .andExpect(jsonPath("$[0].hoeveelheid", is(5)))
+                .andExpect(jsonPath("$[0].cargoId", is("1")))
+                .andExpect(jsonPath("$[1].naam", is("Cargo 2")))
+                .andExpect(jsonPath("$[1].hoeveelheid", is(10)))
+                .andExpect(jsonPath("$[1].cargoId", is("2")));
+    }
+
+    @Test
+    public void givenCargo_whenGetCargosByNaam_thenReturnJsonCargos() throws Exception {
+        List<Cargo> cargoList = new ArrayList<>();
+        cargoList.add(cargo1);
+        cargoList.add(cargo2);
+
+        mockMvc.perform(get("/cargos/naam/{naam}", "Cargo 1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].naam", is("Cargo 1")))
+                .andExpect(jsonPath("$[0].hoeveelheid", is(5)))
+                .andExpect(jsonPath("$[0].cargoId", is("1")));
+    }
+
+    @Test
+    public void givenCargo_whenGetCargosByHoeveelheid_thenReturnJsonCargos() throws Exception {
+        List<Cargo> cargoList = new ArrayList<>();
+        cargoList.add(cargo1);
+        cargoList.add(cargo2);
+
+        mockMvc.perform(get("/cargos/hoeveelheid/{hoeveelheid}", 5))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].naam", is("Cargo 1")))
+                .andExpect(jsonPath("$[0].hoeveelheid", is(5)))
+                .andExpect(jsonPath("$[0].cargoId", is("1")));
+    }
+
+    @Test
+    public void givenCargo_whenGetCargoByCargoId_thenReturnJsonCargo() throws Exception {
+        mockMvc.perform(get("/cargos/{cargoId}", "1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.naam", is("Cargo 1")))
+                .andExpect(jsonPath("$.hoeveelheid", is(5)))
+                .andExpect(jsonPath("$.cargoId", is("1")));
+    }
+
+    @Test
+    public void whenPostCargo_thenReturnJsonCargo() throws Exception {
+        Cargo newCargo = new Cargo("New Cargo", 35, "3");
+        mockMvc.perform(post("/cargos")
+                        .content(mapper.writeValueAsString(newCargo))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.naam", is("New Cargo")))
+                .andExpect(jsonPath("$.hoeveelheid", is(35)))
+                .andExpect(jsonPath("$.cargoId", is("3")));
+    }
+
+    @Test
+    public void givenCargo_whenUpdateCargo_thenReturnJsonCargo() throws Exception {
+        Cargo updatedCargo = new Cargo("Updated Cargo", 25, "1");
+
+        mockMvc.perform(put("/cargos")
+                        .content(mapper.writeValueAsString(updatedCargo))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.naam", is("Updated Cargo")))
+                .andExpect(jsonPath("$.hoeveelheid", is(25)))
+                .andExpect(jsonPath("$.cargoId", is("1")));
+    }
+
+    @Test
+    public void givenCargo_whenDeleteCargo_thenReturnStatusOk() throws Exception {
+        mockMvc.perform(delete("/cargos/{cargoId}", "2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenCargo_whenDeleteCargo_thenReturnStatusNotFound() throws Exception {
+        mockMvc.perform(delete("/ritten/{ritId}", "9")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+
 }

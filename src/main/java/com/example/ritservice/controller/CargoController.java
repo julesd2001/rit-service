@@ -36,7 +36,7 @@ public class CargoController {
     }
 
     @GetMapping("/cargos/hoeveelheid/{hoeveelheid}")
-    public List<Cargo> getCargoByNaam(@PathVariable int hoeveelheid){
+    public List<Cargo> getCargoByHoeveelheid(@PathVariable int hoeveelheid){
         return cargoRepository.findCargoByHoeveelheid(hoeveelheid);
     }
 
